@@ -1,0 +1,253 @@
+<!-- Config -->
+  <script type="text/javascript">
+    "use strict";
+    /*global RED*/
+    RED.nodes.registerType('hamlib-config', {
+      category: 'config',
+      defaults: {
+        host: { value: "localhost", required: true },
+        port: { value: "4532", required: true }
+      },
+      label: function() {
+        return this.host + ":" + this.port;
+      }
+    });
+  </script>
+
+  <script type="text/x-red" data-template-name="hamlib-config">
+    <div class="form-row">
+      <label for="node-config-input-host"><i class="fa fa-globe"></i> Host</label>
+      <input type="text" id="node-config-input-host">
+    </div>
+    <div class="form-row">
+      <label for="node-config-input-port"><i class="fa fa-folder"></i> Port</label>
+      <input type="text" id="node-config-input-port">
+    </div>
+  </script>
+
+
+  <script type="text/javascript">
+      RED.nodes.registerType('hamlib-set', {
+          category: "Hamlib",
+          color: "#FFCC66",
+          defaults: {
+              name: { value: "" },
+              server: { value: "", required: true, type: "hamlib-config" },
+              event: { value: "msg.event", required: true }
+          },
+          inputs: 1,
+          outputs: 1,
+          icon: "arrow-in.svg",
+          paletteLabel: "Set",
+          label: function () {
+              return this.name || (this.event ? 'Set: ' + this.event : "Set");
+          },
+          oneditprepare: function () {
+            $("#node-input-event").typedInput({
+              types: [
+                {
+                  value: "msg.event",
+                  options: [
+                    { value: "msg.event", label: "Set by msg.event" },
+                    { value: "frequency", label: "Frequency" },
+                    { value: "mode", label: "Mode" },
+                    { value: "ptt", label: "PTT" },
+                    { value: "tuningstep", label: "Tuning Steps" },
+                    { value: "noiseblanker", label: "Noise Blanker" },
+                    { value: "automaticnotchfilter", label: "Automatic Notch Filter" },
+                    { value: "manualnotchfilter", label: "Manual Notch Filter" },
+                    { value: "noisereduction", label: "Noise Reduction" },
+                    { value: "audiopeakfilter", label: "Audio Peak Filter" },
+                    { value: "monitor", label: "Monitor" },
+                    { value: "manualgaincontrol", label: "Manual Gain Control" },
+                    { value: "fastautomaticgaincontrol", label: "Fast Automatic Gain Control" },
+                    { value: "lock", label: "Lock" },
+                    { value: "autofrequencycontrol", label: "Auto Frequency Control" },
+                    { value: "tuner", label: "Tuner" },
+                    { value: "preamp", label: "Preamp" },
+                    { value: "afgain", label: "AF Gain" },
+                    { value: "rfgain", label: "RF Gain" },
+                    { value: "rfpowermeter", label: "RF Power Meter" },
+                    { value: "rfpowermeterwatts", label: "RF Power Meter Watts" },
+                    { value: "micgain", label: "Mic Gain" },
+                    { value: "notchfilter", label: "Notch Filter" },
+                    { value: "compression", label: "Compression" },
+                    { value: "automaticgaincontrol", label: "Automatic Gain Control" },
+                    { value: "meter", label: "Meter" },
+                    { value: "swr", label: "SWR" },
+                    { value: "signalstrength", label: "Signal Strength" },
+                    { value: "alc", label: "ALC" },
+                    { value: "tune", label: "Tune" }
+                  ]
+                }
+              ]
+            })
+          },
+      });
+  </script>
+
+  <script type="text/x-red" data-template-name="hamlib-set">
+      <div class="form-row">
+          <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+          <input type="text" id="node-input-name" placeholder="Name">
+      </div>
+  	<div class="form-row">
+          <label for="node-input-server"><i class="fa fa-tag"></i> Hamlib</label>
+          <input type="text" id="node-input-server">
+      </div>
+  	<div class="form-row">
+          <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
+          <input type="text" id="node-input-event">
+      </div>
+  </script>
+
+
+  <script type="text/javascript">
+      RED.nodes.registerType('hamlib-get', {
+          category: "Hamlib",
+          color: "#FFCC66",
+          defaults: {
+              name: { value: "" },
+              server: { value: "", required: true, type: "hamlib-config" },
+              event: { value: "msg.event", required: true }
+          },
+          inputs: 1,
+          outputs: 1,
+          icon: "function.svg",
+          paletteLabel: "Get",
+          label: function () {
+              return this.name || (this.event ? 'Get: ' + this.event : "Get");
+          },
+          oneditprepare: function () {
+            $("#node-input-event").typedInput({
+              types: [
+                {
+                  value: "msg.event",
+                  options: [
+                    { value: "msg.event", label: "Set by msg.event" },
+                    { value: "frequency", label: "Frequency" },
+                    { value: "mode", label: "Mode" },
+                    { value: "ptt", label: "PTT" },
+                    { value: "tuningstep", label: "Tuning Steps" },
+                    { value: "noiseblanker", label: "Noise Blanker" },
+                    { value: "automaticnotchfilter", label: "Automatic Notch Filter" },
+                    { value: "manualnotchfilter", label: "Manual Notch Filter" },
+                    { value: "noisereduction", label: "Noise Reduction" },
+                    { value: "audiopeakfilter", label: "Audio Peak Filter" },
+                    { value: "monitor", label: "Monitor" },
+                    { value: "manualgaincontrol", label: "Manual Gain Control" },
+                    { value: "fastautomaticgaincontrol", label: "Fast Automatic Gain Control" },
+                    { value: "lock", label: "Lock" },
+                    { value: "autofrequencycontrol", label: "Auto Frequency Control" },
+                    { value: "tuner", label: "Tuner" },
+                    { value: "preamp", label: "Preamp" },
+                    { value: "afgain", label: "AF Gain" },
+                    { value: "rfgain", label: "RF Gain" },
+                    { value: "rfpowermeter", label: "RF Power Meter" },
+                    { value: "rfpowermeterwatts", label: "RF Power Meter Watts" },
+                    { value: "micgain", label: "Mic Gain" },
+                    { value: "notchfilter", label: "Notch Filter" },
+                    { value: "compression", label: "Compression" },
+                    { value: "automaticgaincontrol", label: "Automatic Gain Control" },
+                    { value: "meter", label: "Meter" },
+                    { value: "swr", label: "SWR" },
+                    { value: "signalstrength", label: "Signal Strength" },
+                    { value: "alc", label: "ALC" },
+                    { value: "tune", label: "Tune" }
+                  ]
+                }
+              ]
+            })
+          },
+      });
+  </script>
+
+  <script type="text/x-red" data-template-name="hamlib-get">
+      <div class="form-row">
+          <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+          <input type="text" id="node-input-name" placeholder="Name">
+      </div>
+    <div class="form-row">
+          <label for="node-input-server"><i class="fa fa-tag"></i> Hamlib</label>
+          <input type="text" id="node-input-server">
+      </div>
+    <div class="form-row">
+          <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
+          <input type="text" id="node-input-event">
+      </div>
+  </script>
+
+
+  <script type="text/javascript">
+      RED.nodes.registerType('hamlib-listen', {
+          category: "Hamlib",
+          color: "#FFCC66",
+          defaults: {
+              name: { value: "" },
+              server: { value: "", required: true, type: "hamlib-config" },
+              event: { required: true }
+          },
+          inputs: 0,
+          outputs: 1,
+          icon: "bridge.png",
+          paletteLabel: "Listen",
+          label: function () {
+              return this.name || (this.event ? 'Listen: ' + this.event : "Listen");
+          },
+          oneditprepare: function () {
+            $("#node-input-event").typedInput({
+              types: [
+                {
+                  value: "frequency",
+                  options: [
+                    { value: "frequency", label: "Frequency" },
+                    { value: "mode", label: "Mode" },
+                    { value: "ptt", label: "PTT" },
+                    { value: "tuningstep", label: "Tuning Steps" },
+                    { value: "noiseblanker", label: "Noise Blanker" },
+                    { value: "automaticnotchfilter", label: "Automatic Notch Filter" },
+                    { value: "manualnotchfilter", label: "Manual Notch Filter" },
+                    { value: "noisereduction", label: "Noise Reduction" },
+                    { value: "audiopeakfilter", label: "Audio Peak Filter" },
+                    { value: "monitor", label: "Monitor" },
+                    { value: "manualgaincontrol", label: "Manual Gain Control" },
+                    { value: "fastautomaticgaincontrol", label: "Fast Automatic Gain Control" },
+                    { value: "lock", label: "Lock" },
+                    { value: "autofrequencycontrol", label: "Auto Frequency Control" },
+                    { value: "tuner", label: "Tuner" },
+                    { value: "preamp", label: "Preamp" },
+                    { value: "afgain", label: "AF Gain" },
+                    { value: "rfgain", label: "RF Gain" },
+                    { value: "rfpowermeter", label: "RF Power Meter" },
+                    { value: "rfpowermeterwatts", label: "RF Power Meter Watts" },
+                    { value: "micgain", label: "Mic Gain" },
+                    { value: "notchfilter", label: "Notch Filter" },
+                    { value: "compression", label: "Compression" },
+                    { value: "automaticgaincontrol", label: "Automatic Gain Control" },
+                    { value: "meter", label: "Meter" },
+                    { value: "swr", label: "SWR" },
+                    { value: "signalstrength", label: "Signal Strength" },
+                    { value: "alc", label: "ALC" },
+                    { value: "tune", label: "Tune" }
+                  ]
+                }
+              ]
+            })
+          },
+      });
+  </script>
+
+  <script type="text/x-red" data-template-name="hamlib-listen">
+      <div class="form-row">
+          <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+          <input type="text" id="node-input-name" placeholder="Name">
+      </div>
+    <div class="form-row">
+          <label for="node-input-server"><i class="fa fa-tag"></i> Hamlib</label>
+          <input type="text" id="node-input-server">
+      </div>
+    <div class="form-row">
+          <label for="node-input-event"><i class="fa fa-tag"></i> Event</label>
+          <input type="text" id="node-input-event">
+      </div>
+  </script>
