@@ -11,7 +11,7 @@ module.exports = function(RED) {
 
     radios[node.id] = new hamlib(n.port, n.host);
     radios[node.id].on("error", (err) =>{ // Need to handle errors
-      node.log(err);
+      //node.log(err);
     });
 
     node.on("close", function() {
